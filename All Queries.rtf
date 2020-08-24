@@ -1,8 +1,10 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
 {\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;\f2\fnil\fcharset0 Menlo-Regular;
-\f3\fnil\fcharset0 Menlo-Bold;}
-{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
-{\*\expandedcolortbl;;\csgray\c0;}
+\f3\fnil\fcharset0 Menlo-Bold;\f4\fnil\fcharset0 HelveticaNeue;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red31\green36\blue45;\red255\green255\blue255;
+}
+{\*\expandedcolortbl;;\csgray\c0;\cssrgb\c16078\c18824\c23137;\cssrgb\c100000\c100000\c100000;
+}
 \paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
@@ -126,5 +128,17 @@ Integers - \
 PRIMARY KEY\
 FOREIGN KEY\
 \
+Task 1 of the Tableau exercise:\
 \
-}
+select year(b.from_date) as Calendar_Year, a.gender, count(a.emp_no) from t_employees a join t_dept_emp b on a.emp_no = b.emp_no group by Calendar_Year, a.gender having Calendar_Year >= 1990 order by Calendar_Year;\
+\
+Task 2 of the Tableau exercise:\
+\
+\pard\pardeftab720\sl420\partightenfactor0
+
+\f4\b0 \cf3 \cb4 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \outl0\strokewidth0 \strokec3 Compare the number of male managers to the number of female managers from different departments for each year, starting from 1990.
+\f3\b \cf2 \cb1 \kerning1\expnd0\expndtw0 \CocoaLigature0 \outl0\strokewidth0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\
+select year(b.from_date) as Calendar_Year, a.gender, count(b.emp_no), b.dept_no from t_employees a join t_dept_manager b on a.emp_no = b.emp_no group by Calendar_Year, a.gender, b.dept_no having Calendar_Year >= 1990 order by Calendar_Year, b.dept_no;}
