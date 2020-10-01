@@ -1,0 +1,103 @@
+/* 
+Inspect the international debt data.
+Select all of the columns from the international_debt table and limit the output to the first 10 rows.
+*/
+
+SELECT * FROM international_debt
+LIMIT 10;
+
+/* 
+Extract the number of unique countries present in the table.
+*/
+
+SELECT 
+    COUNT(DISTINCT country_name) AS total_distinct_countries
+FROM international_debt;
+
+/*
+Knowing about various debt indicators will help us to understand the areas in which a country can possibly be indebted to.
+*/
+
+SELECT 
+    DISTINCT indicator_code AS distinct_debt_indicators
+FROM international_debt
+ORDER BY distinct_debt_indicators;
+
+/*
+We will now find out the total amount of debt (in USD) that is owed by the different countries. This will give us a sense of how the overall economy of the entire world is holding up.
+*/
+
+SELECT 
+    ROUND(SUM(debt)/1000000, 2) AS total_debt
+FROM international_debt; 
+
+/*
+OUTPUT: 
+total_debt
+3079734.49
+*/
+
+/*
+Let's now find out the country that owns the highest amount of debt along with the amount.
+*/
+
+SELECT 
+    country_name,
+    SUM(debt) AS total_debt
+FROM international_debt
+GROUP BY country_name
+ORDER BY total_debt DESC
+LIMIT 1;
+
+/*
+OUTPUT:
+country_name	| total_debt
+---------------------------
+China	        | 285793494734.200001568
+*/
+
+/*
+We can dig even further to find out on an average how much debt a country owes
+*/
+
+SELECT 
+    indicator_code AS debt_indicator,
+    indicator_name,
+    AVG(debt) AS average_debt
+FROM international_debt
+GROUP BY debt_indicator, indicator_name
+ORDER BY average_debt DESC
+LIMIT 10;
+
+/*
+We can investigate this a bit more so as to find out which country owes the highest amount of debt in the category of long term debts (DT.AMT.DLXF.CD). Since not all the countries suffer from the same kind of economic disturbances, this finding will allow us to understand that particular country's economic condition a bit more specifically.
+*/
+
+SELECT 
+    country_name, 
+    indicator_name
+FROM international_debt
+WHERE debt = (SELECT 
+                 MAX(debt)
+             FROM international_debt
+             WHERE indicator_code='DT.AMT.DLXF.CD');
+             
+/*
+We saw that long-term debt is the topmost category when it comes to the average amount of debt. But is it the most common indicator in which the countries owe their debt? Let's find that out.
+*/
+
+SELECT indicator_code, COUNT(indicator_code) AS indicator_count
+FROM international_debt
+GROUP BY indicator_code
+ORDER BY indicator_count DESC, indicator_code DESC
+LIMIT 20;
+
+/*
+Let's change tracks from debt_indicators now and focus on the amount of debt again. Let's find out the maximum amount of debt across the indicators along with the respective country names.
+*/
+
+SELECT country_name, indicator_code, MAX(debt) AS maximum_debt
+FROM international_debt
+GROUP BY country_name, indicator_code
+ORDER BY maximum_debt DESC
+LIMIT 10;
